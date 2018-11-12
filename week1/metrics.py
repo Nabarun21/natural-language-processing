@@ -39,8 +39,8 @@ def roc_auc(y_test, y_score, n_classes):
              label='macro-average ROC curve (area = {0:0.2f})'.format(roc_auc["macro"]),
              color='navy', linestyle=':', linewidth=4)
     
-    colors = cycle(['aqua', 'darkorange', 'cornflowerblue'])
-    for i, color in zip(range(0,3), colors):
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','cyan','brown'])
+    for i, color in zip(range(0,5), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=2, 
                  label='ROC curve of class {0} (area = {1:0.2f})'.format(i, roc_auc[i]))
     
