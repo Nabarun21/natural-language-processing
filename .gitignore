@@ -2,10 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.jlib
+*.pkl
 # C extensions
 *.so
-
+*.tsv
 # Distribution / packaging
 .Python
 env/

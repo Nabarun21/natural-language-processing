@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import dialogue_manager
 import requests
 import time
 import argparse
@@ -85,7 +85,8 @@ def main():
     # Do not forget to import all needed dependencies when you do so.
     
     simple_manager = SimpleDialogueManager()
-    bot = BotHandler(token, simple_manager)
+    adv_dialogue_manager=dialogue_manager.DialogueManager()
+    bot = BotHandler(token, adv_dialogue_manager)
     
     ###############################################################
 

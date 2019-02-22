@@ -2,15 +2,15 @@ import nltk
 import pickle
 import re
 import numpy as np
-
+import joblib
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
 # Paths for all resources for the bot.
 RESOURCE_PATH = {
-    'INTENT_RECOGNIZER': 'intent_recognizer.pkl',
-    'TAG_CLASSIFIER': 'tag_classifier.pkl',
-    'TFIDF_VECTORIZER': 'tfidf_vectorizer.pkl',
+    'INTENT_RECOGNIZER': 'intent_recognizer.jlib',
+    'TAG_CLASSIFIER': 'tag_classifier.jlib',
+    'TFIDF_VECTORIZER': 'tfidf_vectorizer.jlib',
     'THREAD_EMBEDDINGS_FOLDER': 'thread_embeddings_by_tags',
     'WORD_EMBEDDINGS': 'word_embeddings.tsv',
 }
@@ -42,38 +42,34 @@ def load_embeddings(embeddings_path):
       embeddings_dim - dimension of the vectors.
     """
     
-    # Hint: you have already implemented a similar routine in the 3rd assignment.
-    # Note that here you also need to know the dimension of the loaded embeddings.
-    # When you load the embeddings, use numpy.float32 type as dtype
-
-    ########################
-    #### YOUR CODE HERE ####
-    ########################
-
-    # remove this when you're done
-    raise NotImplementedError(
-        "Open utils.py and fill with your code. In case of Google Colab, download"
-        "(https://github.com/hse-aml/natural-language-processing/blob/master/project/utils.py), "
-        "edit locally and upload using '> arrow on the left edge' -> Files -> UPLOAD")
+    
+    ret_embeddings={}    
+    
+    for line in open(embeddings_path, encoding='utf-8'):
+        word,*emb=line.strip().split('\t')
+        ret_embeddings[word] = [np.float32(x) for x in emb]
+    dim=len(ret_embeddings[list(ret_embeddings.keys())[0]])
+    return ret_embeddings,dim
 
 
 def question_to_vec(question, embeddings, dim):
     """Transforms a string to an embedding by averaging word embeddings."""
     
-    # Hint: you have already implemented exactly this function in the 3rd assignment.
-
-    ########################
-    #### YOUR CODE HERE ####
-    ########################
-
-    # remove this when you're done
-    raise NotImplementedError(
-        "Open utils.py and fill with your code. In case of Google Colab, download"
-        "(https://github.com/hse-aml/natural-language-processing/blob/master/project/utils.py), "
-        "edit locally and upload using '> arrow on the left edge' -> Files -> UPLOAD")
-
+    ret_val=np.zeros(dim)
+    question=question.strip()
+    words=question.split(" ")
+    counter=0
+    for word in words:
+        if word in embeddings:
+            counter+=1
+            ret_val+=embeddings[word]
+       
+    if counter==0:counter+=1
+    return ret_val/counter
+    
+    
 
 def unpickle_file(filename):
     """Returns the result of unpickling the file content."""
     with open(filename, 'rb') as f:
-        return pickle.load(f)
+        return joblib.load(f)
